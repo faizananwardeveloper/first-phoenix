@@ -14,7 +14,7 @@ end
 
 if config_env() == :prod do
   database_url =
-      "postgresql://1cdc593f-8ab8-4cdc-a668-5ee6a2690b6b-user:pw-d6a01a6a-c339-42ea-b4bd-115695489a9c@postgres-free-tier-v2020.gigalixir.com:5432/1cdc593f-8ab8-4cdc-a668-5ee6a2690b6b" ||
+      System.get_env("DATABASE_URL") ||
       raise """
       environment variable DATABASE_URL is missing.
       For example: ecto://USER:PASS@HOST/DATABASE
@@ -23,7 +23,7 @@ if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
 
   config :chat_app, ChatApp.Repo,
-    # ssl: true,
+    ssl: true,
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
@@ -44,7 +44,8 @@ if config_env() == :prod do
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :chat_app, ChatAppWeb.Endpoint,
-    url: [host: host, port: 443],
+    url: [scheme: "https", host: "sheltered-reaches-61718.herokuapp.com", port: 443],
+    force_ssl: [rewrite_on: [:x_forwarded_proto]],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
