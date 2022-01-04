@@ -14,7 +14,7 @@ end
 
 if config_env() == :prod do
   database_url =
-      "ecto://localhost/prod_pg_chat" ||
+      "ecto://c9eb4d4b-872d-4bba-8e3c-749526f2a932-user:pw-8bfcf47d-6490-4092-9bd9-5fc354ae81b3@postgres-free-tier-v2020.gigalixir.com:5432/c9eb4d4b-872d-4bba-8e3c-749526f2a932" ||
       raise """
       environment variable DATABASE_URL is missing.
       For example: ecto://USER:PASS@HOST/DATABASE
